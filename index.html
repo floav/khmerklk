@@ -23,6 +23,31 @@
       #resultTable {
         min-width: 100%;
       }
+      #resultTable th:nth-child(1)::before {
+        content: 'R.';
+      }
+      #resultTable th:nth-child(2)::before {
+        content: 'list';
+      }
+      #resultTable th:nth-child(3)::before {
+        content: 'Size';
+      }
+      #resultTable th:nth-child(4)::before {
+        content: 'g';
+      }
+      #resultTable th:nth-child(5)::before {
+        content: 'unit';
+      }
+      #resultTable th:nth-child(6)::before {
+        content: 'x';
+      }
+      #resultTable th {
+        font-size: 0;
+      }
+      #resultTable th::before {
+        font-size: 0.75rem;
+        display: inline-block;
+      }
     }
   </style>
 </head>
@@ -73,7 +98,7 @@
         </div>
       </div>
       <div class="mt-4">
-        <label class="block text-gray-700 text-sm">✅Quantity (ចំនួនកញ្ចប់):</label>
+        <label class="block text-gray-700 text-sm">Quantity (Packages):</label>
         <input type="number" id="quantityInput" class="w-full p-2 border-2 border-gray-200 rounded-xl bg-white text-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-400 text-sm" required>
         <p id="quantityFeedback" class="error-message">Please enter a quantity!</p>
       </div>
@@ -101,7 +126,7 @@
               <th class="border p-2 text-gray-700 text-xs sm:text-sm">Size</th>
               <th class="border p-2 text-gray-700 text-xs sm:text-sm">Weight (g)</th>
               <th class="border p-2 text-gray-700 text-xs sm:text-sm">Quantity</th>
-              <th class="border p-2 text-gray-700 text-xs sm:text-sm">X</th>
+              <th class="border p-2 text-gray-700 text-xs sm:text-sm">Action</th>
             </tr>
           </thead>
           <tbody id="tableBody"></tbody>
