@@ -23,7 +23,7 @@
 
     <!-- Option 1: Select Category -->
     <div class="mb-6">
-      <h2 class="text-xl font-semibold text-gray-700">Option 1: Select Category</h2>
+      <h2 class="text-xl font-semibold text-yellow-500">Option 1: Select Category</h2>
       <select id="categorySelect" class="w-full p-3 border-2 border-gray-200 rounded-xl mt-2 bg-white text-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-400">
         <option value="">Select Category</option>
         <option value="Woodfree">Woodfree</option>
@@ -36,7 +36,7 @@
 
     <!-- Option 2: Select Sub-Item -->
     <div class="mb-6" id="subItemSection" style="display: none;">
-      <h2 class="text-xl font-semibold text-gray-700">Option 2: Select Sub-Item</h2>
+      <h2 class="text-xl font-semibold text-yellow-500">Option 2: Select Sub-Item</h2>
       <select id="subItemSelect" class="w-full p-3 border-2 border-gray-200 rounded-xl mt-2 bg-white text-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-400">
         <option value="">Select Sub-Item</option>
       </select>
@@ -45,7 +45,7 @@
 
     <!-- Customize Size -->
     <div class="mb-6" id="customizeSection" style="display: none;">
-      <h2 class="text-xl font-semibold text-gray-700">Customize Size</h2>
+      <h2 class="text-xl font-semibold text-yellow-500">Customize Size</h2>
       <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
         <div>
           <label class="block text-gray-700">Weight (g):</label>
@@ -105,26 +105,26 @@
     const items = [];
     const subItems = {
       'Woodfree': [
-        { value: 'Woodfree_70g', weight: '70', width: '63.5', height: '90', text: 'Woodfree 70g 63.5cm x 90cm' },
-        { value: 'Woodfree_60g', weight: '60', width: '63.5', height: '90', text: 'Woodfree 60g 63.5cm x 90cm' },
-        { value: 'Woodfree_120g', weight: '120', width: '63.5', height: '90', text: 'Woodfree 120g 63.5cm x 90cm' }
+        { value: 'Woodfree_70g', weight: '70', width: '63.5', height: '90', text: 'Woodfree 70g 63.5cm x 90cm', name: 'Woodfree' },
+        { value: 'Woodfree_60g', weight: '60', width: '63.5', height: '90', text: 'Woodfree 60g 63.5cm x 90cm', name: 'Woodfree' },
+        { value: 'Woodfree_120g', weight: '120', width: '63.5', height: '90', text: 'Woodfree 120g 63.5cm x 90cm', name: 'Woodfree' }
       ],
       'Art glossy': [
-        { value: 'Art_glossy_300g', weight: '300', width: '63.5', height: '90', text: 'Art glossy 300g 63.5cm x 90cm' },
-        { value: 'Art_glossy_150g', weight: '150', width: '63.5', height: '90', text: 'Art glossy 150g 63.5cm x 90cm' }
+        { value: 'Art_glossy_300g', weight: '300', width: '63.5', height: '90', text: 'Art glossy 300g 63.5cm x 90cm', name: 'Art glossy' },
+        { value: 'Art_glossy_150g', weight: '150', width: '63.5', height: '90', text: 'Art glossy 150g 63.5cm x 90cm', name: 'Art glossy' }
       ],
       'Ivory': [
-        { value: 'Ivory_300g', weight: '300', width: '63.5', height: '90', text: 'Ivory 300g 63.5cm x 90cm' }
+        { value: 'Ivory_300g', weight: '300', width: '63.5', height: '90', text: 'Ivory 300g 63.5cm x 90cm', name: 'Ivory' }
       ],
       'កាបោន': [
-        { value: 'Carbon_White_Top', weight: '', width: '', height: '', text: 'កាបោនសរ' },
-        { value: 'Carbon_Blue_Middle', weight: '', width: '', height: '', text: 'កាបោនខៀវកណ្ដាល' },
-        { value: 'Carbon_Blue_Bottom', weight: '', width: '', height: '', text: 'កាបោនខៀវក្រោម' },
-        { value: 'Carbon_Pink_Middle', weight: '', width: '', height: '', text: 'កាបោនឈូកកណ្ដាល' },
-        { value: 'Carbon_Pink_Bottom', weight: '', width: '', height: '', text: 'កាបោនឈូកក្រោម' },
-        { value: 'Carbon_Yellow_Middle', weight: '', width: '', height: '', text: 'កាបោនលឿងកណ្ដាល' },
-        { value: 'Carbon_Red_Middle', weight: '', width: '', height: '', text: 'កាបោនក្រហមកណ្ដាល' },
-        { value: 'Carbon_Red_Bottom', weight: '', width: '', height: '', text: 'កាបោនក្រហមក្រោម' }
+        { value: 'Carbon_White_Top', weight: '', width: '', height: '', text: 'កាបោនសរ', name: 'កាបោនសរ' },
+        { value: 'Carbon_Blue_Middle', weight: '', width: '', height: '', text: 'កាបោនខៀវកណ្ដាល', name: 'កាបោនខៀវកណ្ដាល' },
+        { value: 'Carbon_Blue_Bottom', weight: '', width: '', height: '', text: 'កាបោនខៀវក្រោម', name: 'កាបោនខៀវក្រោម' },
+        { value: 'Carbon_Pink_Middle', weight: '', width: '', height: '', text: 'កាបោនឈូកកណ្ដាល', name: 'កាបោនឈូកកណ្ដាល' },
+        { value: 'Carbon_Pink_Bottom', weight: '', width: '', height: '', text: 'កាបោនឈូកក្រោម', name: 'កាបោនឈូកក្រោម' },
+        { value: 'Carbon_Yellow_Middle', weight: '', width: '', height: '', text: 'កាបោនលឿងកណ្ដាល', name: 'កាបោនលឿងកណ្ដាល' },
+        { value: 'Carbon_Red_Middle', weight: '', width: '', height: '', text: 'កាបោនក្រហមកណ្ដាល', name: 'កាបោនក្រហមកណ្ដាល' },
+        { value: 'Carbon_Red_Bottom', weight: '', width: '', height: '', text: 'កាបោនក្រហមក្រោម', name: 'កាបោនក្រហមក្រោម' }
       ]
     };
 
@@ -136,8 +136,8 @@
       return Math.ceil((diff + startOfYear.getDay() * 1000 * 60 * 60 * 24) / oneWeek);
     }
 
-    // Set initial date in English format (Tuesday, September 09, 2025, 01:01 PM +07)
-    const currentDate = new Date('2025-09-09T13:01:00+07:00');
+    // Set initial date in English format
+    const currentDate = new Date('2025-09-09T18:19:00+07:00');
     document.getElementById('dateDisplay').textContent = formatDate(currentDate);
 
     // Helper function to format date in English
@@ -296,16 +296,13 @@
       const tableBody = document.getElementById('tableBody');
       tableBody.innerHTML = '';
       items.forEach((item, index) => {
-        const subItemText = subItems[Object.keys(subItems).find(category => 
-          subItems[category].some(sub => sub.value === item.item))].find(sub => sub.value === item.item).text;
-        const displayText = `
-          ${fixedCopyDate}
-          <br>This is the remaining paper stock in our warehouse:
-          <br>- ${subItemText} = ${item.quantity} កញ្ចប់`;
+        const subItem = subItems[Object.keys(subItems).find(category => 
+          subItems[category].some(sub => sub.value === item.item))].find(sub => sub.value === item.item);
+        const itemName = subItem.name;
         const row = document.createElement('tr');
         row.innerHTML = `
           <td class="border p-3">${index + 1}</td>
-          <td class="border p-3">${displayText}</td>
+          <td class="border p-3">${itemName}</td>
           <td class="border p-3">${item.size}</td>
           <td class="border p-3">${item.weight || 'N/A'}</td>
           <td class="border p-3">${item.quantity}</td>
@@ -332,11 +329,12 @@
 
     // Copy button event
     document.getElementById('copyButton').addEventListener('click', () => {
-      const text = `${fixedCopyDate}\n` + items.map(item => {
-        const subItemText = subItems[Object.keys(subItems).find(category => 
-          subItems[category].some(sub => sub.value === item.item))].find(sub => sub.value === item.item).text;
-        return `- ${subItemText} = ${item.quantity} packages`;
-      }).join('\n');
+      const text = `${fixedCopyDate}\nមេនេះជាចំនួនក្រដាស់មាននៅកន្លែងយើង គឺមាន\n` + 
+        items.map(item => {
+          const subItemText = subItems[Object.keys(subItems).find(category => 
+            subItems[category].some(sub => sub.value === item.item))].find(sub => sub.value === item.item).text;
+          return `- ${subItemText} = ${item.quantity} កញ្ចប់`;
+        }).join('\n');
       navigator.clipboard.writeText(text).then(() => {
         alert('Copied to Clipboard!');
       });
