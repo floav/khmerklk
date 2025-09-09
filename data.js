@@ -230,7 +230,8 @@ document.getElementById('copyButton').addEventListener('click', () => {
       const subItem = subItems[Object.keys(subItems).find(category => 
         subItems[category].some(sub => sub.value === item.item))].find(sub => sub.value === item.item);
       const weightText = item.weight ? `${item.weight}g` : '';
-      return `${index + 1}. ${subItem.name} ${weightText} ${item.size} = ${item.quantity} កញ្ចប់`;
+      const sizeText = item.size && item.size !== 'cm x cm' ? item.size : '';
+      return `${index + 1}. ${subItem.name} ${weightText} ${sizeText} = ${item.quantity} កញ្ចប់`;
     }).join('\n');
   navigator.clipboard.writeText(text).then(() => {
     alert('Copied to Clipboard!');
