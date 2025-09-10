@@ -223,7 +223,7 @@ document.getElementById('sortButton').addEventListener('click', () => {
 // Copy button event
 document.getElementById('copyButton').addEventListener('click', () => {
   const currentDate = new Date();
-  const text = `${formatDate(currentDate)}\nមេនេះជាចំនួនក្រដាស់មាននៅកន្លែងយើង \n\n` + 
+  const text = `${formatDate(currentDate)}\nមេនេះជាចំនួនក្រដាស់មាននៅកន្លែងយើង\n\n` + 
     items.map((item, index) => {
       const subItem = subItems[Object.keys(subItems).find(category => 
         subItems[category].some(sub => sub.value === item.item))].find(sub => sub.value === item.item);
@@ -241,3 +241,5 @@ document.getElementById('deleteButton').addEventListener('click', () => {
   items.length = 0;
   updateTable();
 });
+
+
