@@ -47,11 +47,8 @@ function formatDate(date) {
 }
 
 // Set initial date
-const currentDate = new Date('2025-09-09T18:19:00+07:00');
+const currentDate = new Date();
 document.getElementById('dateDisplay').textContent = formatDate(currentDate);
-
-// Fixed date for copy
-const fixedCopyDate = "Monday 30/02/2025 01:12 PM";
 
 // Validate and update button state
 function validateForm() {
@@ -225,7 +222,8 @@ document.getElementById('sortButton').addEventListener('click', () => {
 
 // Copy button event
 document.getElementById('copyButton').addEventListener('click', () => {
-  const text = `${fixedCopyDate}\nមេនេះជាចំនួនក្រដាស់មាននៅកន្លែងយើង គឺមាន\n` + 
+  const currentDate = new Date();
+  const text = `${formatDate(currentDate)}\nមេនេះជាចំនួនក្រដាស់មាននៅកន្លែងយើង \n\n` + 
     items.map((item, index) => {
       const subItem = subItems[Object.keys(subItems).find(category => 
         subItems[category].some(sub => sub.value === item.item))].find(sub => sub.value === item.item);
