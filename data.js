@@ -47,8 +47,7 @@ function formatDate(date) {
 }
 
 // Set initial date
-const currentDate = new Date();
-document.getElementById('dateDisplay').textContent = formatDate(currentDate);
+document.getElementById('dateDisplay').textContent = formatDate(new Date());
 
 // Validate and update button state
 function validateForm() {
@@ -241,5 +240,3 @@ document.getElementById('deleteButton').addEventListener('click', () => {
   items.length = 0;
   updateTable();
 });
-
-
