@@ -1,0 +1,63 @@
+  @font-face {
+  font-family: 'MyFont';
+  src: url('./Krasar\ Regular.ttf') format('truetype');
+  /* src: url('/khs.ttf') format('truetype'); */
+  }
+  body {
+    background: linear-gradient(135deg, #f3f4f6, #e5e7eb);
+    font-family: 'MyFont', sans-serif;
+    
+  }
+  .error-message {
+    display: none;
+    color: #dc2626;
+    font-size: 0.75rem;
+    margin-top: 0.25rem;
+  }
+
+  #loginOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(229, 182, 182, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+  }
+
+  @media (max-width: 640px) {
+    #resultTable th, #resultTable td {
+      font-size: 0.75rem;
+      padding: 0.5rem;
+    }
+    #resultTable {
+      min-width: 100%;
+    }
+    #resultTable th:nth-child(1)::before {
+      content: 'R.';
+    }
+    #resultTable th:nth-child(2)::before {
+      content: 'list';
+    }
+    #resultTable th:nth-child(3)::before {
+      content: 'Size';
+    }
+    #resultTable th:nth-child(4)::before {
+      content: 'g';
+    }
+    #resultTable th:nth-child(5)::before {
+      content: 'unit';
+    }
+    #resultTable th:nth-child(6)::before {
+      content: 'x';
+    }
+    #resultTable th {
+      font-size: 0;
+    }
+    #resultTable th::before {
+      font-size: 0.75rem;
+      display: inline-block;
+    }
