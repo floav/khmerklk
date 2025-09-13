@@ -1,4 +1,4 @@
-const items = [];
+let items = JSON.parse(localStorage.getItem('items')) || [];
 const subItems = {
   'Woodfree': [
     { value: 'Woodfree_70g', weight: '70', width: '63.5', height: '90', text: 'Woodfree 70g 63.5cm x 90cm', name: 'Woodfree' },
@@ -174,6 +174,9 @@ document.getElementById('saveButton').addEventListener('click', () => {
     quantity: quantity
   });
 
+  // Save items to localStorage
+  localStorage.setItem('items', JSON.stringify(items));
+
   updateTable();
   subItemSelect.value = '';
   weightInput.value = '';
@@ -209,6 +212,7 @@ document.getElementById('resultTable').addEventListener('click', (e) => {
   if (e.target.classList.contains('delete-btn')) {
     const index = e.target.getAttribute('data-index');
     items.splice(index, 1);
+    localStorage.setItem('items', JSON.stringify(items));
     updateTable();
   }
 });
@@ -216,6 +220,7 @@ document.getElementById('resultTable').addEventListener('click', (e) => {
 // Sort button event
 document.getElementById('sortButton').addEventListener('click', () => {
   items.sort((a, b) => a.item.localeCompare(b.item));
+  localStorage.setItem('items', JSON.stringify(items));
   updateTable();
 });
 
@@ -238,5 +243,6 @@ document.getElementById('copyButton').addEventListener('click', () => {
 // Delete all button event
 document.getElementById('deleteButton').addEventListener('click', () => {
   items.length = 0;
+  localStorage.setItem('items', JSON.stringify(items));
   updateTable();
 });
