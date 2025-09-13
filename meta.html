@@ -5,110 +5,68 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Size Selection Tool</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <style>
-    body {
-      background: linear-gradient(135deg, #f3f4f6, #e5e7eb);
-    }
-    .error-message {
-      display: none;
-      color: #dc2626;
-      font-size: 0.75rem;
-      margin-top: 0.25rem;
-    }
-    @media (max-width: 640px) {
-      #resultTable th, #resultTable td {
-        font-size: 0.75rem;
-        padding: 0.5rem;
-      }
-      #resultTable {
-        min-width: 100%;
-      }
-      #resultTable th:nth-child(1)::before {
-        content: 'R.';
-      }
-      #resultTable th:nth-child(2)::before {
-        content: 'list';
-      }
-      #resultTable th:nth-child(3)::before {
-        content: 'Size';
-      }
-      #resultTable th:nth-child(4)::before {
-        content: 'g';
-      }
-      #resultTable th:nth-child(5)::before {
-        content: 'unit';
-      }
-      #resultTable th:nth-child(6)::before {
-        content: 'x';
-      }
-      #resultTable th {
-        font-size: 0;
-      }
-      #resultTable th::before {
-        font-size: 0.75rem;
-        display: inline-block;
-      }
-    }
-  </style>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body class="bg-gradient-to-br from-gray-100 to-gray-200 p-4 text-gray-800">
   <div class="max-w-2xl mx-auto bg-white p-6 rounded-2xl shadow-lg border-2 border-gray-300">
     <div class="flex justify-between items-center mb-6">
-      <h1 class="text-2xl font-bold text-gray-700">Size Selection Tool</h1>
-      <button id="logoutButton" class="bg-gradient-to-r from-red-400 to-orange-500 text-white px-4 py-2 rounded-xl hover:from-red-500 hover:to-orange-600 transition duration-300 text-sm">Logout</button>
+      <h1 class="text-2xl font-bold text-gray-700">📝 កត់ចំនួនក្រដាសនៅឃ្លាំង</h1>
+      <button id="logoutButton" class="bg-gradient-to-r from-red-400 to-orange-500 text-white px-4 py-2 rounded-xl hover:from-red-500 hover:to-orange-600 transition duration-300 text-sm">⛔ ចាកចេញ</button>
     </div>
 
     <!-- Option 1: Select Category -->
     <div class="mb-6">
-      <h2 class="text-lg font-semibold text-yellow-500">Option 1: Select Category</h2>
-      <select id="categorySelect" class="w-full p-2 border-2 border-gray-200 rounded-xl mt-2 bg-white text-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-400 text-sm">
-        <option value="">Select Category</option>
+      <h2 class="text-lg font-semibold text-blue-500">ជំហាន 1: ជ្រើសរើសក្រដាស់</h2>
+      <select id="categorySelect" 
+              class="w-full p-2 border-2 border-gray-200 rounded-xl mt-2 bg-white text-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-400 text-sm">
+        <option value="" disabled selected hidden>N/A</option>
         <option value="Woodfree">Woodfree</option>
         <option value="Art glossy">Art glossy</option>
         <option value="Ivory">Ivory</option>
-        <option value="កាបោន">កាបោន (Carbon)</option>
+        <option value="កាបោន">កាបោន</option>
       </select>
-      <p id="categoryFeedback" class="error-message">Please select a category!</p>
+      <p id="categoryFeedback" class="error-message">សូមប្រាកដថាលោកអ្នកបានជ្រើសរើសរួចរាល់!</p>
     </div>
-
+    
+    
     <!-- Option 2: Select Sub-Item -->
     <div class="mb-6" id="subItemSection" style="display: none;">
-      <h2 class="text-lg font-semibold text-yellow-500">Option 2: Select Sub-Item</h2>
+      <h2 class="text-lg font-semibold text-blue-500">ជំហាន 2: ជ្រើសរើសខ្នាត</h2>
       <select id="subItemSelect" class="w-full p-2 border-2 border-gray-200 rounded-xl mt-2 bg-white text-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-400 text-sm">
-        <option value="">Select Sub-Item</option>
+        <option value="" disabled selected hidden>N/A</option>
       </select>
-      <p id="subItemFeedback" class="error-message">Please select a sub-item!</p>
+      <p id="subItemFeedback" class="error-message">Please select a category</p>
     </div>
 
     <!-- Customize Size -->
     <div class="mb-6" id="customizeSection" style="display: none;">
-      <h2 class="text-lg font-semibold text-yellow-500">Customize Size</h2>
+      <h2 class="text-lg font-semibold text-blue-500">ការកំណត់</h2>
       <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
         <div>
-          <label class="block text-gray-700 text-sm">Weight (g):</label>
+          <label class="block text-gray-700 text-sm">ក្រាម (g):</label>
           <input type="number" id="weightInput" class="w-full p-2 border-2 border-gray-200 rounded-xl bg-white text-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-400 text-sm" placeholder="Can be left empty">
           <p id="weightFeedback" class="error-message">Enter weight if desired!</p>
         </div>
         <div>
-          <label class="block text-gray-700 text-sm">Width (cm):</label>
+          <label class="block text-gray-700 text-sm">ទទឹង (cm):</label>
           <input type="number" id="widthInput" class="w-full p-2 border-2 border-gray-200 rounded-xl bg-white text-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-400 text-sm" placeholder="Can be left empty">
           <p id="widthFeedback" class="error-message">Enter width if desired!</p>
         </div>
         <div>
-          <label class="block text-gray-700 text-sm">Height (cm):</label>
+          <label class="block text-gray-700 text-sm">ប្រវែង (cm):</label>
           <input type="number" id="heightInput" class="w-full p-2 border-2 border-gray-200 rounded-xl bg-white text-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-400 text-sm" placeholder="Can be left empty">
           <p id="heightFeedback" class="error-message">Enter height if desired!</p>
         </div>
       </div>
       <div class="mt-4">
-        <label class="block text-gray-700 text-sm">Quantity (Packages):</label>
+        <label class="block text-gray-700 text-sm">ចំនួន (គិតជាកញ្ចប់):</label>
         <input type="number" id="quantityInput" class="w-full p-2 border-2 border-gray-200 rounded-xl bg-white text-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-400 text-sm" required>
         <p id="quantityFeedback" class="error-message">Please enter a quantity!</p>
       </div>
     </div>
 
     <!-- Save Button -->
-    <button id="saveButton" class="w-full sm:w-auto bg-gradient-to-r from-indigo-400 to-blue-500 text-white px-4 py-2 rounded-xl hover:from-indigo-500 hover:to-blue-600 transition duration-300 text-sm" style="display: none;" disabled>Save</button>
+    <button id="saveButton" class="w-full sm:w-auto bg-gradient-to-r from-indigo-400 to-blue-500 text-white px-4 py-2 rounded-xl hover:from-indigo-500 hover:to-blue-600 transition duration-300 text-sm" style="display: none;" disabled>កក់ទុក</button>
 
     <!-- Table and Sort/Copy/Delete Buttons -->
     <div class="mt-6">
@@ -116,20 +74,20 @@
         <p id="dateDisplay" class="font-semibold text-base text-gray-700"></p>
       </div>
       <div class="flex flex-col sm:flex-row justify-between mb-4 gap-2">
-        <button id="sortButton" class="w-full sm:w-auto bg-gradient-to-r from-green-400 to-teal-500 text-white px-4 py-2 rounded-xl hover:from-green-500 hover:to-teal-600 transition duration-300 text-sm">Sort</button>
-        <button id="copyButton" class="w-full sm:w-auto bg-gradient-to-r from-purple-400 to-indigo-500 text-white px-4 py-2 rounded-xl hover:from-purple-500 hover:to-indigo-600 transition duration-300 text-sm">Copy</button>
-        <button id="deleteButton" class="w-full sm:w-auto bg-gradient-to-r from-red-400 to-orange-500 text-white px-4 py-2 rounded-xl hover:from-red-500 hover:to-orange-600 transition duration-300 text-sm">Delete</button>
+        <button id="sortButton" class="w-full sm:w-auto bg-gradient-to-r from-green-400 to-teal-500 text-white px-4 py-2 rounded-xl hover:from-green-500 hover:to-teal-600 transition duration-300 text-sm">តម្រៀប</button>
+        <button id="copyButton" class="w-full sm:w-auto bg-gradient-to-r from-purple-400 to-indigo-500 text-white px-4 py-2 rounded-xl hover:from-purple-500 hover:to-indigo-600 transition duration-300 text-sm">ចម្លង</button>
+        <button id="deleteButton" class="w-full sm:w-auto bg-gradient-to-r from-red-400 to-orange-500 text-white px-4 py-2 rounded-xl hover:from-red-500 hover:to-orange-600 transition duration-300 text-sm">លុបចោល</button>
       </div>
       <div class="overflow-x-auto">
         <table id="resultTable" class="w-full border-collapse border border-gray-200">
           <thead>
             <tr class="bg-gradient-to-r from-gray-200 to-gray-100">
-              <th class="border p-2 text-gray-700 text-xs sm:text-sm">No.</th>
-              <th class="border p-2 text-gray-700 text-xs sm:text-sm">Item</th>
-              <th class="border p-2 text-gray-700 text-xs sm:text-sm">Size</th>
-              <th class="border p-2 text-gray-700 text-xs sm:text-sm">Weight (g)</th>
-              <th class="border p-2 text-gray-700 text-xs sm:text-sm">Quantity</th>
-              <th class="border p-2 text-gray-700 text-xs sm:text-sm">Action</th>
+              <th class="border p-2 text-gray-700 text-xs sm:text-sm">លេខរៀង</th>
+              <th class="border p-2 text-gray-700 text-xs sm:text-sm">ក្រដាស</th>
+              <th class="border p-2 text-gray-700 text-xs sm:text-sm">ទំហំ</th>
+              <th class="border p-2 text-gray-700 text-xs sm:text-sm">ក្រាម (g)</th>
+              <th class="border p-2 text-gray-700 text-xs sm:text-sm">ចំនួន</th>
+              <th class="border p-2 text-gray-700 text-xs sm:text-sm">លុប</th>
             </tr>
           </thead>
           <tbody id="tableBody"></tbody>
