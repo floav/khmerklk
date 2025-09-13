@@ -53,7 +53,10 @@
 </head>
 <body class="bg-gradient-to-br from-gray-100 to-gray-200 p-4 text-gray-800">
   <div class="max-w-2xl mx-auto bg-white p-6 rounded-2xl shadow-lg border-2 border-gray-300">
-    <h1 class="text-2xl font-bold mb-6 text-center text-gray-700">Size Selection Tool</h1>
+    <div class="flex justify-between items-center mb-6">
+      <h1 class="text-2xl font-bold text-gray-700">Size Selection Tool</h1>
+      <button id="logoutButton" class="bg-gradient-to-r from-red-400 to-orange-500 text-white px-4 py-2 rounded-xl hover:from-red-500 hover:to-orange-600 transition duration-300 text-sm">Logout</button>
+    </div>
 
     <!-- Option 1: Select Category -->
     <div class="mb-6">
@@ -98,7 +101,7 @@
         </div>
       </div>
       <div class="mt-4">
-        <label class="block text-gray-700 text-sm">✅Quantity (ចំនួនកញ្ចប់):</label>
+        <label class="block text-gray-700 text-sm">Quantity (Packages):</label>
         <input type="number" id="quantityInput" class="w-full p-2 border-2 border-gray-200 rounded-xl bg-white text-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-400 text-sm" required>
         <p id="quantityFeedback" class="error-message">Please enter a quantity!</p>
       </div>
@@ -136,5 +139,31 @@
   </div>
 
   <script src="data.js"></script>
+  <script>
+    // Check if user is logged in
+    if (!sessionStorage.getItem('loggedIn')) {
+      window.location.href = 'login.html';
+    } else {
+      // Prevent leaving the page
+      window.onbeforeunload = function() {
+        return 'Are you sure you want to leave? You must logout first.';
+      };
+      // Prevent back button
+      history.pushState(null, null, location.href);
+      window.onpopstate = function() {
+        history.go(1);
+      };
+    }
+
+    // Logout handling
+    document.getElementById('logoutButton').addEventListener('click', () => {
+      sessionStorage.removeItem('loggedIn');
+      items.length = 0;
+      updateTable();
+      window.onbeforeunload = null;
+      window.onpopstate = null;
+      window.location.href = 'login.html';
+    });
+  </script>
 </body>
 </html>
