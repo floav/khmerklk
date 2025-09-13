@@ -144,15 +144,6 @@
     if (localStorage.getItem('loggedIn') !== 'true' || !localStorage.getItem('sessionToken')) {
       window.location.href = 'index.html';
     } else {
-      // Prevent leaving the page
-      window.onbeforeunload = function() {
-        return 'Are you sure you want to leave? You must logout first.';
-      };
-      // Prevent back button
-      history.pushState(null, null, location.href);
-      window.onpopstate = function() {
-        history.go(1);
-      };
       // Load saved items
       updateTable();
     }
@@ -164,8 +155,6 @@
       localStorage.removeItem('items');
       items.length = 0;
       updateTable();
-      window.onbeforeunload = null;
-      window.onpopstate = null;
       window.location.href = 'index.html';
     });
   </script>
