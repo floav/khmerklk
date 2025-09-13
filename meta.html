@@ -142,7 +142,7 @@
   <script>
     // Check if user is logged in
     if (!sessionStorage.getItem('loggedIn')) {
-      window.location.href = 'login.html';
+      window.location.href = 'index.html';
     } else {
       // Prevent leaving the page
       window.onbeforeunload = function() {
@@ -162,7 +162,7 @@
       updateTable();
       window.onbeforeunload = null;
       window.onpopstate = null;
-      window.location.href = 'login.html';
+      window.location.href = 'index.html';
     });
   </script>
 </body>
