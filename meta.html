@@ -140,8 +140,8 @@
 
   <script src="data.js"></script>
   <script>
-    // Check if user is logged in
-    if (!sessionStorage.getItem('loggedIn')) {
+    // Check if user is logged in with a valid session token
+    if (localStorage.getItem('loggedIn') !== 'true' || !localStorage.getItem('sessionToken')) {
       window.location.href = 'index.html';
     } else {
       // Prevent leaving the page
@@ -153,11 +153,15 @@
       window.onpopstate = function() {
         history.go(1);
       };
+      // Load saved items
+      updateTable();
     }
 
     // Logout handling
     document.getElementById('logoutButton').addEventListener('click', () => {
-      sessionStorage.removeItem('loggedIn');
+      localStorage.removeItem('loggedIn');
+      localStorage.removeItem('sessionToken');
+      localStorage.removeItem('items');
       items.length = 0;
       updateTable();
       window.onbeforeunload = null;
