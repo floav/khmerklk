@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Login - Size Selection Tool</title>
+  <title>ចូលគណនី</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
     body {
@@ -47,13 +47,21 @@
   </div>
 
   <script>
+    // Redirect to meta.html if already logged in
+    if (localStorage.getItem('loggedIn') === 'true' && localStorage.getItem('sessionToken')) {
+      window.location.href = 'meta.html';
+    }
+
     document.getElementById('loginButton').addEventListener('click', () => {
       const username = document.getElementById('usernameInput').value.trim();
       const password = document.getElementById('passwordInput').value.trim();
       const feedback = document.getElementById('loginFeedback');
 
       if (username === 'THARY' && password === '2025') {
-        sessionStorage.setItem('loggedIn', 'true');
+        // Generate a simple session token
+        const sessionToken = btoa(Date.now().toString() + ':THARY');
+        localStorage.setItem('loggedIn', 'true');
+        localStorage.setItem('sessionToken', sessionToken);
         window.location.href = 'meta.html';
       } else {
         feedback.style.display = 'block';
