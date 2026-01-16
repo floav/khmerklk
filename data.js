@@ -14,11 +14,18 @@ const subItems = {
   ],
   'កាបោន': [
     { value: 'Carbon_White_Top', weight: '', width: '', height: '', text: 'កាបោនសរ', name: 'កាបោនសរ' },
+    { value: 'Carbon_White_Top', weight: '', width: '', height: '', text: 'កាបោនសរកណ្ដាល', name: 'កាបោនសរកណ្ដាល' },
+     { value: 'Carbon_White_Top', weight: '', width: '', height: '', text: 'កាបោនសរក្រោម', name: 'កាបោនសរក្រោម' },
+    { value: 'Carbon_Yellow_Middle', weight: '', width: '', height: '', text: 'កាបោនខៀវ', name: 'កាបោនខៀវ' },
     { value: 'Carbon_Blue_Middle', weight: '', width: '', height: '', text: 'កាបោនខៀវកណ្ដាល', name: 'កាបោនខៀវកណ្ដាល' },
     { value: 'Carbon_Blue_Bottom', weight: '', width: '', height: '', text: 'កាបោនខៀវក្រោម', name: 'កាបោនខៀវក្រោម' },
+     { value: 'Carbon_White_Top', weight: '', width: '', height: '', text: 'កាបោនឈូក', name: 'កាបោនឈូក' },
     { value: 'Carbon_Pink_Middle', weight: '', width: '', height: '', text: 'កាបោនឈូកកណ្ដាល', name: 'កាបោនឈូកកណ្ដាល' },
     { value: 'Carbon_Pink_Bottom', weight: '', width: '', height: '', text: 'កាបោនឈូកក្រោម', name: 'កាបោនឈូកក្រោម' },
+    { value: 'Carbon_Yellow_Middle', weight: '', width: '', height: '', text: 'កាបោនលឿង', name: 'កាបោនលឿង' },
     { value: 'Carbon_Yellow_Middle', weight: '', width: '', height: '', text: 'កាបោនលឿងកណ្ដាល', name: 'កាបោនលឿងកណ្ដាល' },
+    { value: 'Carbon_Yellow_Middle', weight: '', width: '', height: '', text: 'កាបោនលឿងក្រោម', name: 'កាបោនលឿងក្រោម' },
+    { value: 'Carbon_Yellow_Middle', weight: '', width: '', height: '', text: 'កាបោនក្រហម', name: 'កាបោនក្រហម' },
     { value: 'Carbon_Red_Middle', weight: '', width: '', height: '', text: 'កាបោនក្រហមកណ្ដាល', name: 'កាបោនក្រហមកណ្ដាល' },
     { value: 'Carbon_Red_Bottom', weight: '', width: '', height: '', text: 'កាបោនក្រហមក្រោម', name: 'កាបោនក្រហមក្រោម' }
   ]
