@@ -316,7 +316,7 @@ document.getElementById('sortButton').addEventListener('click', () => {
 // Copy button event
 document.getElementById('copyButton').addEventListener('click', () => {
   const currentDate = new Date();
-  let text = `${formatDate(currentDate)}\nមេនេះជាចំនួនក្រដាស់មាននៅកន្លែងយើង\n\n`;
+  let text = `${formatDate(currentDate)}\nCheking Papper Size... \n\n`;
   
   // Group items by category for better organization
   const groupedItems = {};
