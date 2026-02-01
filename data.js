@@ -3,7 +3,7 @@ let items = JSON.parse(localStorage.getItem('items')) || [];
 // Khmer weekday names
 const khmerDays = ["អាទិត្យ", "ច័ន្ទ", "អង្គារ", "ពុធ", "ព្រហស្បតិ៍", "សុក្រ", "សៅរ៍"];
 
-// Updated subItems with additional Ivory size
+// Updated subItems with additional Ivory 250g size
 const subItems = {
   'Woodfree': [
     { value: 'Woodfree_70g',   weight: '70',  width: '63.5', height: '90', text: 'Woodfree 70g 63.5cm x 90cm',   name: 'Woodfree' },
@@ -16,7 +16,8 @@ const subItems = {
   ],
   'Ivory': [
     { value: 'Ivory_300g',        weight: '300', width: '63.5', height: '90',  text: 'Ivory 300g 63.5cm x 90cm',   name: 'Ivory' },
-    { value: 'Ivory_300g_109x79', weight: '300', width: '109', height: '79',  text: 'Ivory 300g 109cm x 79cm',    name: 'Ivory' }
+    { value: 'Ivory_300g_109x79', weight: '300', width: '109', height: '79',  text: 'Ivory 300g 109cm x 79cm',    name: 'Ivory' },
+    { value: 'Ivory_250g_109x79', weight: '250', width: '109', height: '79',  text: 'Ivory 250g 109cm x 79cm',    name: 'Ivory' } // បន្ថែម Ivory 250g 109cm x 79cm
   ],
   'កាបោន': [
     { value: 'Carbon_White_Top',    weight: '', width: '', height: '', text: 'កាបោនសរ',          name: 'កាបោនសរ' },
@@ -134,9 +135,10 @@ document.getElementById('subItemSelect').addEventListener('change', function() {
     const widthi = document.getElementById('widthInput');
     const hi = document.getElementById('heightInput');
 
-    if (!wi.value && w) wi.value = w;
-    if (!widthi.value && wd) widthi.value = wd;
-    if (!hi.value && h) hi.value = h;
+    // ALWAYS update the fields with the selected sub-item's values
+    wi.value = w;
+    widthi.value = wd;
+    hi.value = h;
   }
   validateForm();
 });
@@ -156,18 +158,49 @@ document.getElementById('saveButton').addEventListener('click', () => {
   const cat = document.getElementById('categorySelect').value;
   const sub = document.getElementById('subItemSelect');
   const opt = sub.options[sub.selectedIndex];
-  const w  = document.getElementById('weightInput').value   || opt.dataset.weight;
-  const wd = document.getElementById('widthInput').value    || opt.dataset.width;
-  const h  = document.getElementById('heightInput').value   || opt.dataset.height;
+  const w  = document.getElementById('weightInput').value;
+  const wd = document.getElementById('widthInput').value;
+  const h  = document.getElementById('heightInput').value;
   const q  = document.getElementById('quantityInput').value;
 
-  items.push({
-    item: opt.value,
-    size: `${wd}cm x ${h}cm`,
-    weight: w,
-    quantity: q,
-    category: cat
-  });
+  const itemName = opt.value;
+  const itemFullText = opt.textContent; // "Ivory 250g 109cm x 79cm" or "កាបោនខៀវក្រោម"
+  
+  // Check if item already exists (based on full item details)
+  const existingIndex = items.findIndex(item => 
+    item.item === itemName && 
+    item.size === `${wd} x ${h}` && 
+    item.weight === w
+  );
+  
+  if (existingIndex !== -1) {
+    // Update existing item quantity
+    items[existingIndex].quantity = parseInt(items[existingIndex].quantity) + parseInt(q);
+  } else {
+    // Extract just the name part (remove weight and size)
+    let itemDisplayName = itemFullText;
+    
+    // For non-carbon items, remove weight and size
+    if (cat !== 'កាបោន') {
+      itemDisplayName = itemFullText.replace(/\d+g/g, '').replace(/\d+\.?\d*cm x \d+\.?\d*cm/g, '').trim();
+      itemDisplayName = itemDisplayName.replace(/\s+/g, ' ').replace(/x/g, '').trim();
+    }
+    
+    // Add new item
+    items.push({
+      item: itemName,
+      itemText: itemDisplayName, // Store display name without dimensions
+      itemFullText: itemFullText, // Store full text for copying
+      size: `${wd} x ${h}`,
+      weight: w,
+      quantity: q,
+      category: cat,
+      rawWidth: wd,
+      rawHeight: h,
+      rawWeight: w,
+      isCarbon: cat === 'កាបោន' // Add flag for carbon items
+    });
+  }
 
   localStorage.setItem('items', JSON.stringify(items));
   updateTable();
@@ -181,32 +214,118 @@ document.getElementById('saveButton').addEventListener('click', () => {
   validateForm();
 });
 
-// Update table display
+// Update table display with edit functionality
 function updateTable() {
   const tbody = document.getElementById('tableBody');
   tbody.innerHTML = '';
 
   items.forEach((it, idx) => {
-    let name = 'Unknown';
-    for (const c in subItems) {
-      const found = subItems[c].find(s => s.value === it.item);
-      if (found) {
-        name = found.name;
-        break;
-      }
-    }
-
     const row = document.createElement('tr');
-    row.innerHTML = `
-      <td class="border p-2">${idx + 1}</td>
-      <td class="border p-2">${name}</td>
-      <td class="border p-2">${it.size}</td>
-      <td class="border p-2">${it.weight || 'N/A'}</td>
-      <td class="border p-2">${it.quantity}</td>
-      <td class="border p-2">
-        <button class="delete-btn text-red-500 hover:text-red-700 text-xs" data-index="${idx}">X</button>
-      </td>
-    `;
+    
+    // លេខរៀង
+    const indexCell = document.createElement('td');
+    indexCell.className = 'border p-2 text-center';
+    indexCell.textContent = idx + 1;
+    
+    // ឈ្មោះទំនិញ (មានតែឈ្មោះ គ្មានទំហំ គ្មានទម្ងន់)
+    const nameCell = document.createElement('td');
+    nameCell.className = 'border p-2';
+    nameCell.contentEditable = true;
+    nameCell.textContent = it.itemText || 'Unknown';
+    nameCell.addEventListener('blur', () => {
+      items[idx].itemText = nameCell.textContent;
+      localStorage.setItem('items', JSON.stringify(items));
+    });
+
+    // ទំហំ (សម្រាប់តារាងទី២ - ទំហំ)
+    const sizeCell = document.createElement('td');
+    sizeCell.className = 'border p-2 text-center';
+    sizeCell.contentEditable = true;
+    
+    // For carbon items, show empty or hide size
+    let sizeValue = it.size;
+    if (it.isCarbon) {
+      sizeValue = ''; // Empty for carbon items
+    } else {
+      // Remove "cm" for non-carbon items
+      sizeValue = it.size.replace('cm', '').replace('x cm', 'x').replace('cm x', 'x').trim();
+    }
+    
+    sizeCell.textContent = sizeValue;
+    sizeCell.addEventListener('blur', () => {
+      const newSize = sizeCell.textContent.trim();
+      items[idx].size = newSize;
+      
+      // Update raw dimensions for non-carbon items
+      if (!it.isCarbon) {
+        const parts = newSize.split('x');
+        if (parts.length === 2) {
+          items[idx].rawWidth = parts[0].trim();
+          items[idx].rawHeight = parts[1].trim();
+        }
+      }
+      
+      localStorage.setItem('items', JSON.stringify(items));
+    });
+
+    // ទម្ងន់ (សម្រាប់តារាងទី២ - ទំហំ)
+    const weightCell = document.createElement('td');
+    weightCell.className = 'border p-2 text-center';
+    weightCell.contentEditable = true;
+    
+    // For carbon items, show empty or hide weight
+    let weightValue = it.weight.toString();
+    if (it.isCarbon) {
+      weightValue = ''; // Empty for carbon items
+    } else {
+      // Remove "g" for non-carbon items
+      weightValue = weightValue.replace('g', '').replace('N/A', '').trim();
+    }
+    
+    weightCell.textContent = weightValue;
+    weightCell.addEventListener('blur', () => {
+      const newWeight = weightCell.textContent.trim();
+      items[idx].weight = newWeight;
+      
+      // Update raw weight for non-carbon items
+      if (!it.isCarbon) {
+        items[idx].rawWeight = newWeight;
+      }
+      
+      localStorage.setItem('items', JSON.stringify(items));
+    });
+
+    // បរិមាណ
+    const quantityCell = document.createElement('td');
+    quantityCell.className = 'border p-2 text-center';
+    quantityCell.contentEditable = true;
+    quantityCell.textContent = it.quantity;
+    quantityCell.addEventListener('blur', () => {
+      const newQty = parseInt(quantityCell.textContent);
+      if (!isNaN(newQty) && newQty > 0) {
+        items[idx].quantity = newQty;
+        localStorage.setItem('items', JSON.stringify(items));
+      } else {
+        quantityCell.textContent = items[idx].quantity;
+      }
+    });
+
+    // ម៉ែត្រកែសំរួល
+    const actionCell = document.createElement('td');
+    actionCell.className = 'border p-2 text-center';
+    const deleteBtn = document.createElement('button');
+    deleteBtn.className = 'delete-btn text-red-500 hover:text-red-700 text-xs';
+    deleteBtn.textContent = '×';
+    deleteBtn.dataset.index = idx;
+    actionCell.appendChild(deleteBtn);
+
+    row.appendChild(indexCell);
+    row.appendChild(nameCell);
+    row.appendChild(sizeCell);
+    row.appendChild(weightCell);
+    row.appendChild(quantityCell);
+    row.appendChild(actionCell);
+    
     tbody.appendChild(row);
   });
 }
@@ -226,63 +345,77 @@ document.getElementById('sortButton').addEventListener('click', () => {
   items.sort((a, b) => {
     if (a.category !== b.category) return a.category.localeCompare(b.category);
     
-    let nameA = 'Unknown', nameB = 'Unknown';
-    for (const c in subItems) {
-      if (subItems[c].find(s => s.value === a.item)) nameA = subItems[c].find(s => s.value === a.item).name;
-      if (subItems[c].find(s => s.value === b.item)) nameB = subItems[c].find(s => s.value === b.item).name;
-    }
+    let nameA = a.itemText || 'Unknown';
+    let nameB = b.itemText || 'Unknown';
     return nameA.localeCompare(nameB);
   });
   localStorage.setItem('items', JSON.stringify(items));
   updateTable();
 });
 
-// Copy to clipboard (improved format)
-document.getElementById('copyButton').addEventListener('click', () => {
+// Copy to clipboard (improved format - no category grouping)
+document.getElementById('copyButton').addEventListener('click', async () => {
   const now = new Date();
   const dateStr = `${khmerDays[now.getDay()]} ${String(now.getDate()).padStart(2,'0')}.${String(now.getMonth()+1).padStart(2,'0')}.${String(now.getFullYear()).slice(-2)} ${String(now.getHours()%12||12).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')} ${now.getHours()>=12?'PM':'AM'}`;
 
-  let text = `${dateStr}\n\n`;
+  let text = `${dateStr}\n`;
 
-  const grouped = {};
-  items.forEach(it => {
-    let name = 'Unknown', cat = 'Unknown';
-    for (const c in subItems) {
-      const s = subItems[c].find(sub => sub.value === it.item);
-      if (s) { name = s.name; cat = c; break; }
+  // Simple list format without category grouping
+  items.forEach((it, index) => {
+    // Reconstruct full item text
+    let itemFullText = it.itemText || 'Unknown';
+    
+    // For carbon items: don't add weight or size
+    if (!it.isCarbon) {
+      // Add weight if exists
+      if (it.weight && it.weight !== 'N/A' && it.weight !== '') {
+        itemFullText += ` ${it.weight}g`;
+      }
+      
+      // Add size if exists and not empty
+      if (it.size && it.size.trim() !== '' && it.size !== ' x ') {
+        const sizeWithCm = it.size.split('x').map(dim => dim.trim() + 'cm').join(' x ');
+        if (sizeWithCm !== 'cm' && sizeWithCm !== 'cm x cm') {
+          itemFullText += ` ${sizeWithCm}`;
+        }
+      }
     }
-
-    if (!grouped[cat]) grouped[cat] = [];
     
-    let lineParts = [name];
-    if (it.weight && it.weight.trim()) lineParts.push(`${it.weight}g`);
-    if (it.size && it.size !== 'cm x cm' && it.size.trim()) lineParts.push(it.size);
-    
-    grouped[cat].push(lineParts.join(' ') + ` = ${it.quantity} កញ្ចប់`);
+    text += `${index + 1}. ${itemFullText} = ${it.quantity} កញ្ចប់\n`;
   });
-
-  let counter = 1;
-  for (const cat in grouped) {
-    if (grouped[cat].length) {
-      text += `${cat}:\n`;
-      grouped[cat].forEach(line => {
-        text += `${counter}. ${line}\n`;
-        counter++;
-      });
-      text += '\n';
-    }
-  }
 
   if (items.length === 0) text += "(មិនមានទំនិញ)\n";
 
-  navigator.clipboard.writeText(text.trim())
-    .then(() => alert('បានចម្លងទៅ Clipboard រួចរាល់!'))
-    .catch(() => alert('មានបញ្ហាក្នុងការចម្លង សូមព្យាយាមម្ដងទៀត'));
+  try {
+    await navigator.clipboard.writeText(text.trim());
+    
+    // Change button text and color temporarily
+    const copyBtn = document.getElementById('copyButton');
+    const originalText = copyBtn.textContent;
+    const originalColor = copyBtn.style.color;
+    const originalBg = copyBtn.style.backgroundColor;
+    
+    copyBtn.textContent = 'បានចម្លង';
+    copyBtn.style.backgroundColor = '#10B981'; // Green color
+    copyBtn.style.color = 'white';
+    copyBtn.disabled = true;
+    
+    // Revert after 0.5 seconds (500ms)
+    setTimeout(() => {
+      copyBtn.textContent = originalText;
+      copyBtn.style.backgroundColor = originalBg;
+      copyBtn.style.color = originalColor;
+      copyBtn.disabled = false;
+    }, 500);
+    
+  } catch (err) {
+    alert('មានបញ្ហាក្នុងការចម្លង សូមព្យាយាមម្ដងទៀត');
+  }
 });
 
 // Clear all
 document.getElementById('deleteButton').addEventListener('click', () => {
-  if (confirm('បញ្ជាក់ថាចង់លុបទាំងអស់មែនទេ?')) {
+  if (confirm('បញ្ជាក់ថាចង់លុបទំនិញទាំងអស់មែនទេ?')) {
     items = [];
     localStorage.setItem('items', JSON.stringify(items));
     updateTable();
