@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="km">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>កម្មវិធីគណនាស្ទឺគ័រ</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Kantumruy+Pro:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Kantumruy Pro', sans-serif;
+            background-color: #f3f4f6;
+        }
+        .canvas-container {
+            background-color: white;
+            background-image: 
+                linear-gradient(45deg, #f9fafb 25%, transparent 25%), 
+                linear-gradient(-45deg, #f9fafb 25%, transparent 25%), 
+                linear-gradient(45deg, transparent 75%, #f9fafb 75%), 
+                linear-gradient(-45deg, transparent 75%, #f9fafb 75%);
+            background-size: 20px 20px;
+            background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
+        }
+        .sticker-item {
+            background-repeat: no-repeat;
+            background-size: cover;
+            background-position: center;
+        }
+        .ruler-label {
+            color: black;
+            font-weight: bold;
+            font-size: 16px;
+        }
+        .ruler-line {
+            background: black;
+        }
+        /* កែសម្រួលឱ្យ Header នៅដាច់ពីតារាង */
+        #layoutHeader {
+            position: absolute;
+            top: 20px; /* នៅខាងលើបង្អស់ */
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            text-align: center;
+        }
+        #mainLayoutWrapper {
+            /* margin-top: 1px;  */
+            position: relative;
+        }
+    </style>
+</head>
+<body class="p-4 md:p-6">
+    <div class="max-w-[1800px] mx-auto">
+        <header class="mb-6 text-center">
+            <h1 class="text-3xl font-bold text-blue-900">កម្មវិធីរៀបប្លង់ស្ទឺគ័រ</h1>
+            <!-- <p class="text-gray-600">ព័ត៌មានបង្ហាញនៅខាងលើដាច់ដោយឡែក មិនប៉ះពាល់ដល់ការរៀបសន្លឹក</p> -->
+        </header>
+
+        <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
+            <div class="lg:col-span-1 space-y-5 bg-white p-5 rounded-xl shadow-lg border border-gray-200 h-fit sticky top-4">
+                <section>
+                    <h2 class="text-md font-bold mb-3 border-b pb-2 text-blue-800">1. Setting Products</h2>
+                    <div class="space-y-3">
+                        <div>
+                            <label class="block text-xs font-bold text-gray-500 mb-1">Image</label>
+                            <input type="file" id="stickerFile" accept="image/*" class="text-xs w-full file:mr-3 file:py-2 file:px-4 file:rounded-md file:border-0 file:bg-blue-600 file:text-white hover:file:bg-blue-700 cursor:pointer">
+                        </div>
+                        <div class="grid grid-cols-2 gap-3">
+                            <div>
+                                <label class="block text-xs font-bold text-gray-500 mb-1">ទទឹង (cm)</label>
+                                <input type="number" id="stW" value="5" step="0.1" oninput="calculateLayout()" class="w-full border border-gray-300 rounded p-2 text-sm">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-gray-500 mb-1">កម្ពស់ (cm)</label>
+                                <input type="number" id="stH" value="5" step="0.1" oninput="calculateLayout()" class="w-full border border-gray-300 rounded p-2 text-sm">
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-gray-500 mb-1">ចន្លោះកម្លាត (cm)</label>
+                            <input type="number" id="spacing" value="0.3" step="0.1" oninput="calculateLayout()" class="w-full border border-gray-300 rounded p-2 text-sm">
+                        </div>
+                        <div class="flex items-center mt-2">
+                            <input type="checkbox" id="showLabel" checked onchange="calculateLayout()" class="w-4 h-4 text-blue-600 border-gray-300 rounded">
+                            <label for="showLabel" class="ml-2 text-xs font-bold text-gray-700">Hidden information Chart</label>
+                        </div>
+                    </div>
+                </section>
+
+                <section>
+                    <h2 class="text-md font-bold mb-3 border-b pb-2 text-blue-800">2. Roll Sticker Size</h2>
+                    <div class="space-y-3">
+                        <div class="grid grid-cols-2 gap-3">
+                            <div>
+                                <label class="block text-xs font-bold text-gray-500 mb-1">W (cm)</label>
+                                <input type="number" id="paperW" value="100" oninput="calculateLayout()" class="w-full border border-gray-300 rounded p-2 text-sm">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-gray-500 mb-1">H (cm)</label>
+                                <input type="number" id="paperH" value="100" oninput="calculateLayout()" class="w-full border border-gray-300 rounded p-2 text-sm">
+                            </div>
+                        </div>
+                        <div class="p-3 bg-red-50 border border-red-100 rounded-md">
+                            <label class="block text-xs font-bold text-red-600 uppercase">Sign Signal Die_cutting (cm)</label>
+                            <input type="number" id="margin" value="3" step="0.1" oninput="calculateLayout()" class="mt-1 w-full border border-red-200 rounded p-2 text-red-700 font-bold">
+                        </div>
+                    </div>
+                </section>
+
+                <div class="pt-4 space-y-3">
+                    <button onclick="downloadAsPDF()" class="w-full bg-blue-700 text-white font-bold py-3 rounded-lg hover:bg-blue-800 transition shadow-md">ទាញយក PDF</button>
+                    <button onclick="downloadAsImage()" class="w-full bg-green-600 text-white font-bold py-3 rounded-lg hover:bg-green-700 transition shadow-md">ទាញយករូបភាព</button>
+                </div>
+            </div>
+
+            <div class="lg:col-span-3 space-y-6">
+                <div class="bg-white p-5 rounded-xl shadow-md border border-gray-100 grid grid-cols-2 md:grid-cols-4 gap-4">
+                    <div class="text-center p-2 bg-blue-50 rounded border border-blue-100">
+                        <div class="text-xs text-blue-600 font-bold">ចំនួនសរុប</div>
+                        <div id="totalCount" class="text-2xl font-black text-blue-800">0</div>
+                    </div>
+                    <div class="text-center p-2 bg-green-50 rounded border border-green-100">
+                        <div class="text-xs text-green-600 font-bold">W x H</div>
+                        <div id="gridInfo" class="text-lg font-black text-green-800">0 x 0</div>
+                    </div>
+                    <div class="text-center p-2 bg-purple-50 rounded border border-purple-100">
+                        <div class="text-xs text-purple-600 font-bold">ផ្ទៃបោះពុម្ព</div>
+                        <div id="usableArea" class="text-lg font-black text-purple-800">-</div>
+                    </div>
+                    <div class="text-center p-2 bg-orange-50 rounded border border-orange-100">
+                        <div class="text-xs text-orange-600 font-bold">ទម្រង់រៀប</div>
+                        <div id="orientationText" class="text-sm font-black text-orange-800">-</div>
+                    </div>
+                </div>
+
+                <div class="bg-white p-4 rounded-xl shadow-inner border border-gray-200 overflow-auto flex flex-col items-center">
+                    <div id="captureArea" class="p-20 bg-white relative min-w-max">
+                        <div id="layoutHeader"></div>
+
+                        <div id="mainLayoutWrapper" class="inline-block">
+                            <div class="ruler-line absolute left-[-15px] top-0 bottom-0 w-[3px]"></div>
+                            <div id="rulerV" class="ruler-label absolute left-[-60px] top-1/2 -translate-y-1/2 origin-center -rotate-90 whitespace-nowrap"></div>
+                            
+                            <div id="paperCanvas" class="canvas-container relative border-[3px] border-black shadow-lg overflow-hidden flex flex-col items-center justify-center">
+                                <div id="marginIndicator" class="absolute inset-0 border-2 border-red-500 border-dashed pointer-events-none opacity-40 z-0"></div>
+                                <div id="stickerGrid" class="flex flex-wrap items-center justify-center relative z-10"></div>
+                            </div>
+
+                            <div class="ruler-line absolute bottom-[-15px] left-0 right-0 h-[3px]"></div>
+                            <div id="rulerH" class="ruler-label absolute bottom-[-45px] left-1/2 -translate-x-1/2"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="loadingOverlay" class="hidden fixed inset-0 bg-black/70 z-[100] flex flex-col items-center justify-center text-white">
+        <div class="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-blue-500 mb-4"></div>
+        <p id="loadingText" class="text-xl font-bold">កំពុងរៀបចំឯកសារ...</p>
+    </div>
+
+    <script>
+        let stickerDataUrl = 'https://via.placeholder.com/150?text=Sticker';
+        let stickerName = 'Name Products';
+        const displayThreshold = 3000;
+
+        document.getElementById('stickerFile').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                stickerName = file.name.replace(/\.[^/.]+$/, ""); 
+                const reader = new FileReader();
+                reader.onload = (event) => {
+                    stickerDataUrl = event.target.result;
+                    calculateLayout();
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        function calculateLayout() {
+            const stW = parseFloat(document.getElementById('stW').value) || 1;
+            const stH = parseFloat(document.getElementById('stH').value) || 1;
+            const spacing = parseFloat(document.getElementById('spacing').value) || 0;
+            const paperW = parseFloat(document.getElementById('paperW').value) || 100;
+            const paperH = parseFloat(document.getElementById('paperH').value) || 100;
+            const margin = parseFloat(document.getElementById('margin').value) || 0;
+
+            const usableW = Math.max(0.1, paperW - margin);
+            const usableH = Math.max(0.1, paperH - margin);
+
+            document.getElementById('usableArea').innerText = `${usableW.toFixed(1)}x${usableH.toFixed(1)} cm`;
+
+            const cols1 = Math.floor((usableW + spacing) / (stW + spacing));
+            const rows1 = Math.floor((usableH + spacing) / (stH + spacing));
+            const total1 = Math.max(0, cols1 * rows1);
+
+            const cols2 = Math.floor((usableW + spacing) / (stH + spacing));
+            const rows2 = Math.floor((usableH + spacing) / (stW + spacing));
+            const total2 = Math.max(0, cols2 * rows2);
+
+            let fCols, fRows, fW, fH, orient;
+            if (total2 > total1) {
+                fCols = cols2; fRows = rows2; fW = stH; fH = stW; orient = "ផ្ដេក (Rotate)";
+            } else {
+                fCols = cols1; fRows = rows1; fW = stW; fH = stH; orient = "បញ្ឈរ (Normal)";
+            }
+
+            const total = fCols * fRows;
+            document.getElementById('totalCount').innerText = total.toLocaleString();
+            document.getElementById('gridInfo').innerText = `${fRows} W x ${fCols} H`;
+            document.getElementById('orientationText').innerText = orient;
+
+            renderCanvas(fCols, fRows, fW, fH, spacing, paperW, paperH, margin, total);
+        }
+
+        function renderCanvas(cols, rows, sw, sh, sp, pw, ph, margin, total) {
+            const canvas = document.getElementById('paperCanvas');
+            const grid = document.getElementById('stickerGrid');
+            const header = document.getElementById('layoutHeader');
+            const marginInd = document.getElementById('marginIndicator');
+            const showLabel = document.getElementById('showLabel').checked;
+            
+            const screenScale = Math.min(900 / pw, 800 / ph);
+            
+            canvas.style.width = (pw * screenScale) + 'px';
+            canvas.style.height = (ph * screenScale) + 'px';
+            marginInd.style.inset = (margin/2 * screenScale) + 'px';
+
+            document.getElementById('rulerH').innerText = pw + ' cm';
+            document.getElementById('rulerV').innerText = ph + ' cm';
+
+            grid.innerHTML = '';
+            grid.style.width = ((sw + sp) * cols * screenScale - (sp * screenScale)) + 'px';
+            grid.style.height = ((sh + sp) * rows * screenScale - (sp * screenScale)) + 'px';
+            grid.style.gap = (sp * screenScale) + 'px';
+
+            const fragment = document.createDocumentFragment();
+            const countToDisplay = Math.min(total, displayThreshold);
+            
+            for (let i = 0; i < countToDisplay; i++) {
+                const img = document.createElement('div');
+                img.className = 'sticker-item border-[0.5px] border-gray-100';
+                img.style.backgroundImage = `url(${stickerDataUrl})`;
+                img.style.width = (sw * screenScale) + 'px';
+                img.style.height = (sh * screenScale) + 'px';
+                fragment.appendChild(img);
+            }
+            grid.appendChild(fragment);
+
+            if (showLabel) {
+                // កំណត់ទំហំអក្សរតាមទំហំក្រដាស ដើម្បីកុំឱ្យវាតូចពេកពេលទាញយក
+                const fontSize = Math.max(18, pw * screenScale * 0.03);
+                header.innerHTML = `
+                    <div class="text-black font-bold" style="font-size: ${fontSize}px">Sticker
+                        ${stickerName} ${sw}cm x ${sh}cm
+                        = <span class="text-red-600">${total.toLocaleString()} Pcs</span>
+                    </div>
+                `;
+            } else {
+                header.innerHTML = '';
+            }
+        }
+
+        async function downloadAsPDF() {
+            const { jsPDF } = window.jspdf;
+            const loading = document.getElementById('loadingOverlay');
+            const captureArea = document.getElementById('captureArea');
+            loading.classList.remove('hidden');
+
+            const pw = parseFloat(document.getElementById('paperW').value);
+            const ph = parseFloat(document.getElementById('paperH').value);
+
+            try {
+                const canvas = await html2canvas(captureArea, { 
+                    scale: 2, 
+                    useCORS: true,
+                    backgroundColor: "#ffffff"
+                });
+                const imgData = canvas.toDataURL('image/jpeg', 1.0);
+                
+                // បន្ថែម Margin បន្តិចជុំវិញ PDF
+                const pdf = new jsPDF({
+                    orientation: pw > ph ? 'l' : 'p',
+                    unit: 'cm',
+                    format: [pw + 10, ph + 15] 
+                });
+
+                const pdfWidth = pdf.internal.pageSize.getWidth();
+                const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
+                
+                pdf.addImage(imgData, 'JPEG', 0, 0, pdfWidth, pdfHeight);
+                pdf.save(`${stickerName}-Layout.pdf`);
+            } finally {
+                loading.classList.add('hidden');
+            }
+        }
+
+        async function downloadAsImage() {
+            const captureArea = document.getElementById('captureArea');
+            const canvas = await html2canvas(captureArea, { 
+                scale: 2, 
+                useCORS: true,
+                backgroundColor: "#ffffff"
+            });
+            const link = document.createElement('a');
+            link.download = `${stickerName}-Preview.png`;
+            link.href = canvas.toDataURL('image/png');
+            link.click();
+        }
+
+        window.onload = calculateLayout;
+    </script>
+</body>
+</html>
